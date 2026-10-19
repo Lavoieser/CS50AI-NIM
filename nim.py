@@ -69,7 +69,7 @@ class Nim():
         # Check for a winner
         if all(pile == 0 for pile in self.piles):
             self.winner = self.player   # Si les piles sont à 0, le gagnant n'est pas celui qui vient de jouer
-                                        # self.player est l'autre joueur à cause du self.switch_player() précédent
+            # self.player est l'autre joueur à cause du self.switch_player() précédent
 
 
 class NimAI():
@@ -104,11 +104,11 @@ class NimAI():
         If no Q-value exists yet in `self.q`, return 0.
         """
         # Define the key
-        key = (tuple(state), action) 
+        key = (tuple(state), action)
 
         # The Q value is in the q dictionary, if not the value is set to 0
         return self.q.get(key, 0)
-        
+
      #   raise NotImplementedError
 
     def update_q_value(self, state, action, old_q, reward, future_rewards):
@@ -129,7 +129,7 @@ class NimAI():
         key = (tuple(state), action)
         value = old_q + self.alpha*((reward + future_rewards) - old_q)
         self.q[key] = value
-        
+
         # raise NotImplementedError
 
     def best_future_reward(self, state):
@@ -175,19 +175,19 @@ class NimAI():
         action_list = list(Nim.available_actions(state))
         reward = 0
         best_action = action_list[0]
-       
+
         if (epsilon == False) or (epsilon == True and random.random() > self.epsilon):
-        #   route = "Exploit"
+            #   route = "Exploit"
             for a in action_list:
                 if reward < self.get_q_value(state, a):
                     best_action = a
                     reward = self.get_q_value(state, a)
         else:
-        #   route = "Explore"
+            #   route = "Explore"
             best_action = random.choice(action_list)
 
         return best_action
-                
+
         # raise NotImplementedError
 
 
@@ -202,7 +202,7 @@ def train(n):
     for i in range(n):
         print(f"Playing training game {i + 1}")
         game = Nim()        # À la création, game.player = 0
-                            # Créée le jeu: [1, 3, 5, 7]
+        # Créée le jeu: [1, 3, 5, 7]
 
         # Keep track of last move made by either player
         last = {
@@ -217,22 +217,22 @@ def train(n):
             state = game.piles.copy()
             action = player.choose_action(game.piles)
 
-
-
             # Keep track of last state and action
             last[game.player]["state"] = state
             last[game.player]["action"] = action
 
             # Make move
             game.move(action)       # La procédure change le player, met à jour piles (state)
-                                    # détermine si la partie est finie (winner not none)
+            # détermine si la partie est finie (winner not none)
             new_state = game.piles.copy()
 
             # When game is over, update Q values with rewards
             if game.winner is not None:
-                player.update(state, action, new_state, -1)     # S'applique au joueur qui a fait le dernier move: le perdant
+                # S'applique au joueur qui a fait le dernier move: le perdant
+                player.update(state, action, new_state, -1)
                 player.update(
-                    last[game.player]["state"],                 # Le joueur a changé dans 'move', donc il s'agit ici du jeu précédent par l'autre joueur - le gagnant
+                    # Le joueur a changé dans 'move', donc il s'agit ici du jeu précédent par l'autre joueur - le gagnant
+                    last[game.player]["state"],
                     last[game.player]["action"],
                     new_state,
                     1
